@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comparisontool>
+    <simulations>
+        <simulation source="generate">
+            <graphtype>RandomForward</graphtype>
+            <modeltype>SemSimulation</modeltype>
+        </simulation>
+        <simulation source="file">
+            <data>data.txt</data>
+            <truegraph>graph.txt</truegraph>
+        </simulation>
+    </simulations>
+    <algorithms>
+        <algorithm name="fges">
+            <test>fisher-z-test</test>
+            <score>sem-bic</score>
+        </algorithm>
+    </algorithms>
+    <parameters>
+        <parameter name="numRuns" value="2"/>
+        <parameter name="numMeasures" value="100,50"/>
+        <parameter name="avgDegree" value="4"/>
+    </parameters>
+    <statistics>
+       <statistic>AdjacencyPrecision</statistic>
+        <statistic>AdjacencyRecall</statistic>
+    </statistics>
+    <comparison>
+        <property ame="showAlgorithmIndices">false</property>
+        <property name="showAlgorithmIndices">false</property>
+        <property name="tabDelimitedTables">false</property>
+    </comparison>
+</comparisontool>
