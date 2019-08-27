@@ -66,8 +66,11 @@ def create_new_parameters(combination):
 # Return a pretty-printed XML string for the Element
 def prettify(element):
     raw_string = ET.tostring(element, 'utf-8')
-    formatted_string = minidom.parseString(raw_string)
-    return formatted_string.toprettyxml()
+    reparsed = minidom.parseString(raw_string)
+    # minidom's toprettyxml() produces rather unpretty XML with default values and adds un-necessary newlines
+    formatted_string = reparsed.toprettyxml()
+    # We'll do extra work to remove the junk new-lines
+    return '\n'.join([line for line in formatted_string.split('\n') if line.strip()])
 
 # Create single configuration xml file
 def create_single_config_file(simulations, algorithms, parameters):
@@ -84,7 +87,7 @@ def create_single_config_file(simulations, algorithms, parameters):
 
     # Pretty print the xml string 
     formatted_str = prettify(new_root)
-
+    print(formatted_str)
     # Create the tree with the formatted string
     new_tree = ET.ElementTree(ET.fromstring(formatted_str))
     
