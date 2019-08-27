@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from itertools import product
 from xml.dom import minidom
 import copy
+import sys
 import os
 
 # Read in
@@ -9,6 +10,11 @@ file = 'comparison.xml'
 filename = os.path.splitext(file)[0]
 tree = ET.parse(file)
 root = tree.getroot()
+
+def validate():
+    for parameter in root.iter('parameter'):
+        if (parameter.get('name') == 'numRuns') and (len(parameter.get('value').split(',')) > 1):
+            sys.exit('Error: parameter named "numRuns" can not take multiple values.')
 
 # Reuse the current comparison and statistics elements
 def copy_comparison():
@@ -27,6 +33,7 @@ def get_parameters_combinations():
         values =  parameter.get('value')
         # Split the comma-separated values into a list
         values_list = values.split(',')
+
         # Add the list to the params lists for calculating combinations
         params_list.append(values_list)
 
@@ -112,4 +119,5 @@ def output():
                 index = index + 1
 
 # Entry point
+validate()
 output()
