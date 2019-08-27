@@ -7,4 +7,9 @@ cd causal-compare-hpc-utility
 python algoCompare.py
 ````
 
-The above run will generate a directory named as the original configuration file name and create individual XML configuration files in that directory. Then you can run the individual comparison with the CLI tool.
+The above run will generate a directory named as the original configuration file name (e.e., `configuration/`) and create individual XML configuration files (`configuration_1.xml`, `configuration_2.xml`...) in that directory. It will also create a slurm batch script called `sbatch.sh`, which can be used as a slurm job array to submit those individual causal compare jobs.
+
+````
+cd configuration
+sbatch sbatch.sh
+````

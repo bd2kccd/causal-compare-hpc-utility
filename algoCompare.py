@@ -5,7 +5,7 @@ import copy
 import sys
 import os
 
-# Read in
+# Read in xml
 file = 'comparison.xml'
 filename = os.path.splitext(file)[0]
 tree = ET.parse(file)
@@ -100,11 +100,11 @@ def create_single_config_file(simulations, algorithms, parameters, index):
     # Sufix a number to the filename
     new_tree.write(filename + "_" + str(index) + ".xml", encoding='utf-8', xml_declaration=True, method="xml")
 
-# Final output
-def output():
-    # Put all individual config files into a folder named with the orginal file name
-    os.mkdir(filename)
-    os.chdir(filename)
+# Validate parameter and generate individual config files
+def create_config_files():
+    # First validate 'numRuns' parameter value
+    validate()
+
     # Create a single config case each individual simulation, algorithm, and parameters combination
     index = 1
     for simulation in root.iter('simulation'):
@@ -113,11 +113,32 @@ def output():
                 new_simulations = create_new_simulations(simulation)
                 new_algorithms = create_new_algorithms(algorithm)
                 new_parameters = create_new_parameters(params_combination)
-
+                
                 # Generating config file
                 create_single_config_file(new_simulations, new_algorithms, new_parameters, index)
                 index = index + 1
 
+# Generate the sbatch.sh
+def create_slurm_sbatch():
+    # read in sbatch template
+    sbatch = ''
+    # By this step, we've changed the working directory
+    with open('../sbatch.template', 'r') as file:
+        template = file.read()
+        sbatch = template.format(filename=filename)
+
+    with open("sbatch.sh", "w") as script:
+        script.write(sbatch)
+
+# The general workflow here
+def run():
+    # Put all individual config files as well as the sbatch script 
+    # into a folder named with the orginal file name
+    os.mkdir(filename)
+    os.chdir(filename)
+
+    create_config_files()
+    create_slurm_sbatch()
+
 # Entry point
-validate()
-output()
+run()
