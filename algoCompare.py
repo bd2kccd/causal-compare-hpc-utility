@@ -3,7 +3,6 @@ from itertools import product
 from xml.dom import minidom
 import copy
 import os
-from uuid import uuid4
 
 # Read in
 file = 'comparison.xml'
@@ -73,7 +72,7 @@ def prettify(element):
     return '\n'.join([line for line in formatted_string.split('\n') if line.strip()])
 
 # Create single configuration xml file
-def create_single_config_file(simulations, algorithms, parameters):
+def create_single_config_file(simulations, algorithms, parameters, index):
     new_root = ET.Element('comparisontool')
     
     # Append new elements
@@ -87,13 +86,12 @@ def create_single_config_file(simulations, algorithms, parameters):
 
     # Pretty print the xml string 
     formatted_str = prettify(new_root)
-    print(formatted_str)
     # Create the tree with the formatted string
     new_tree = ET.ElementTree(ET.fromstring(formatted_str))
     
     # Write to output file
-    # Use a random UUID to name the file
-    new_tree.write(str(uuid4()) + "_config.xml", encoding='utf-8', xml_declaration=True, method="xml")
+    # Sufix a number to the filename
+    new_tree.write(filename + "_" + str(index) + ".xml", encoding='utf-8', xml_declaration=True, method="xml")
 
 # Final output
 def output():
@@ -101,6 +99,7 @@ def output():
     os.mkdir(filename)
     os.chdir(filename)
     # Create a single config case each individual simulation, algorithm, and parameters combination
+    index = 1
     for simulation in root.iter('simulation'):
         for algorithm in root.iter('algorithm'):
             for params_combination in get_parameters_combinations():
@@ -109,7 +108,8 @@ def output():
                 new_parameters = create_new_parameters(params_combination)
 
                 # Generating config file
-                create_single_config_file(new_simulations, new_algorithms, new_parameters)
+                create_single_config_file(new_simulations, new_algorithms, new_parameters, index)
+                index = index + 1
 
 # Entry point
 output()
