@@ -7,7 +7,7 @@ import os
 
 # Read in xml
 file = 'comparison.xml'
-filename = os.path.splitext(file)[0]
+config_filename_prefix = os.path.splitext(file)[0] + "_"
 tree = ET.parse(file)
 root = tree.getroot()
 
@@ -98,9 +98,10 @@ def create_single_config_file(simulations, algorithms, parameters, index):
     
     # Write to output file
     # Sufix a number to the filename
-    new_tree.write(filename + "_" + str(index) + ".xml", encoding='utf-8', xml_declaration=True, method="xml")
+    new_tree.write(config_filename_prefix + str(index) + ".xml", encoding='utf-8', xml_declaration=True, method="xml")
 
 # Validate parameter and generate individual config files
+# Also return the number of individual config files
 def create_config_files():
     # First validate 'numRuns' parameter value
     validate()
@@ -117,15 +118,21 @@ def create_config_files():
                 # Generating config file
                 create_single_config_file(new_simulations, new_algorithms, new_parameters, index)
                 index = index + 1
+    
+    # By now we have the total number of config files
+    # This is also the size of the slurm job array
+    num_config_files = index -1 
+
+    return num_config_files
 
 # Generate the sbatch.sh
-def create_slurm_sbatch():
+def create_slurm_sbatch(sbatch_template_path, job_array_size, config_filename_prefix):
     # read in sbatch template
     sbatch = ''
     # By this step, we've changed the working directory
-    with open('../sbatch.template', 'r') as file:
+    with open(sbatch_template_path, 'r') as file:
         template = file.read()
-        sbatch = template.format(filename=filename)
+        sbatch = template.format(config_filename_prefix=config_filename_prefix, job_array_size=job_array_size)
 
     with open("sbatch.sh", "w") as script:
         script.write(sbatch)
@@ -134,11 +141,12 @@ def create_slurm_sbatch():
 def run():
     # Put all individual config files as well as the sbatch script 
     # into a folder named with the orginal file name
-    os.mkdir(filename)
-    os.chdir(filename)
+    dir_name = config_filename_prefix + 'xml'
+    os.mkdir(dir_name)
+    os.chdir(dir_name)
 
-    create_config_files()
-    create_slurm_sbatch()
+    num_config_files = create_config_files()
+    create_slurm_sbatch('../sbatch.template', num_config_files, config_filename_prefix)
 
 # Entry point
 run()
