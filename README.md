@@ -4,10 +4,10 @@ This is a utility tool written in Python to faciliate with running the [causal-c
 
 ````
 cd causal-compare-hpc-utility
-python algoCompare.py
+python app.py
 ````
 
-The above run will generate a directory named as the original configuration file name (e.e., `configuration/`) and create individual XML configuration files (`configuration_1.xml`, `configuration_2.xml`...) in that directory. It will also create a slurm batch script called `sbatch.sh`, which can be used as a slurm job array to submit those individual causal compare jobs.
+The above run (works with both Python 2 and Python 3) will generate a directory named as the original configuration file name (e.e., `configuration/`) and create individual XML configuration files (`configuration_1.xml`, `configuration_2.xml`...) in that directory. It will also create a slurm batch script called `sbatch.sh`, which can be used as a slurm job array to submit those individual causal compare jobs.
 
 ````
 cd configuration
