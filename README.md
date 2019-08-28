@@ -13,3 +13,10 @@ The above run will generate a directory named as the original configuration file
 cd configuration
 sbatch sbatch.sh
 ````
+
+If you want to get email notifiations of the jobs, you can add the following to the generated `sbatch.sh` script:
+
+````
+#SBATCH --mail-user=username@example.com
+#SBATCH --mail-type=ALL
+````
