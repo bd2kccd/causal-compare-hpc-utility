@@ -15,4 +15,4 @@ echo "My SLURM_ARRAY_TASK_ID: " $SLURM_ARRAY_TASK_ID
 
 # Assuming you have causal-compare-with-dependencies.jar at the project root directory
 cd ..
-java -jar causal-compare-with-dependencies.jar {config_filename_prefix}$SLURM_ARRAY_TASK_ID.xml
+java -jar causal-compare-with-dependencies.jar --config {config_filename_prefix}$SLURM_ARRAY_TASK_ID.xml
