@@ -13,7 +13,7 @@ root = tree.getroot()
 
 def validate():
     for parameter in root.iter('parameter'):
-        if (parameter.get('name') == 'numRuns') and (len(parameter.get('value').split(',')) > 1):
+        if (parameter.get('name') == 'numRuns') and (len(parameter.text.split(',')) > 1):
             sys.exit('Error: parameter named "numRuns" can not take multiple values.')
 
 # Reuse the current comparison and statistics elements
@@ -30,10 +30,8 @@ def get_parameters_combinations():
     # Create a list of params lists
     params_list = list()
     for parameter in root.iter('parameter'):
-        values =  parameter.get('value')
         # Split the comma-separated values into a list
-        values_list = values.split(',')
-
+        values_list =  parameter.text.split(',')
         # Add the list to the params lists for calculating combinations
         params_list.append(values_list)
 
@@ -63,7 +61,7 @@ def create_new_parameters(combination):
     for i in range(count):
         param = ET.Element('parameter')
         param.set('name', parameters_list[i].get('name'))
-        param.set('value', combination[i])
+        param.text = combination[i]
 
         new_parameters.append(param)
 

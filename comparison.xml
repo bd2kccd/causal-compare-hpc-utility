@@ -6,28 +6,35 @@
             <modeltype>SemSimulation</modeltype>
         </simulation>
         <simulation source="file">
-            <data>data.txt</data>
-            <truegraph>graph.txt</truegraph>
+            <data>src/test/resources/data/data_sim_10var_1kcase.txt</data>
+            <truegraph>src/test/resources/data/graph_sim_10var_1kcase.txt</truegraph>
         </simulation>
     </simulations>
     <algorithms>
-        <algorithm name="fges">
+        <algorithm name="gfci">
             <test>fisher-z-test</test>
             <score>sem-bic</score>
         </algorithm>
+        <algorithm name="fges">
+            <score>sem-bic</score>
+        </algorithm>
     </algorithms>
-    <parameters>
-        <parameter name="numRuns" value="2"/>
-        <parameter name="numMeasures" value="100,50"/>
-        <parameter name="avgDegree" value="4"/>
-    </parameters>
     <statistics>
-       <statistic>AdjacencyPrecision</statistic>
-        <statistic>AdjacencyRecall</statistic>
+        <statistic>adjacencyprecision</statistic>
+        <statistic>arrowheadrecall</statistic>
+        <statistic>adjacencyrecall</statistic>
     </statistics>
+    <parameters>
+        <parameter name="numRuns">1</parameter>
+        <parameter name="numMeasures">4,6</parameter>
+        <parameter name="avgDegree">4</parameter>
+    </parameters>
     <comparison>
-        <property ame="showAlgorithmIndices">false</property>
-        <property name="showAlgorithmIndices">false</property>
-        <property name="tabDelimitedTables">false</property>
+        <property name="showAlgorithmIndices">true</property>
+        <property name="showSimulationIndices">true</property>
+        <property name="sortByUtility">true</property>
+        <property name="showUtilities">true</property>
+        <property name="saveSearchGraphs">true</property>
+        <property name="tabDelimitedTables">true</property>
     </comparison>
 </comparisontool>
