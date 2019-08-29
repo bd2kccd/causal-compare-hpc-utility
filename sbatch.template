@@ -1,7 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name causal-compare    # A single job name for the array
 # Submit a job array with index values between 0 and 31
-$ sbatch --array=0-31    -N1 tmp
 #SBATCH --nodes=1    # Use one node
 #SBATCH --ntasks=1    # Run a single task
 #SBATCH --partition=RM    # Partition
